@@ -10,4 +10,4 @@ spring:
     password: ${SPRING_R2DBC_PASSWORD:Password123!}
   data:
     mongodb:
-      uri: ${SPRING_DATA_MONGODB_URI:mongodb://admin:admin123@192.168.49.1:27017/Visons?authSource=admin}
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://admin:admin123@192.168.49.1:27017/Visons?authSource=admin&directConnection=true}
