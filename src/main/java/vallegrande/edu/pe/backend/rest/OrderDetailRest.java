@@ -20,4 +20,6 @@ public class OrderDetailRest {
     public Mono<OrderDetail> create(@RequestBody OrderDetail obj) { return service.save(obj); }
     @PutMapping("/{id}")
     public Mono<OrderDetail> update(@PathVariable Integer id, @RequestBody OrderDetail obj) { return service.update(id, obj); }
+    @GetMapping("/limit/{limit}")
+    public Flux<OrderDetail> findLimited(@PathVariable int limit) { return service.findAll().take(limit); }
 }

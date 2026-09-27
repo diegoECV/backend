@@ -20,4 +20,6 @@ public class InventoryBatchRest {
     public Mono<InventoryBatch> create(@RequestBody InventoryBatch obj) { return service.save(obj); }
     @PutMapping("/{id}")
     public Mono<InventoryBatch> update(@PathVariable String id, @RequestBody InventoryBatch obj) { return service.update(id, obj); }
+    @GetMapping("/limit/{limit}")
+    public Flux<InventoryBatch> findLimited(@PathVariable int limit) { return service.findAll().take(limit); }
 }

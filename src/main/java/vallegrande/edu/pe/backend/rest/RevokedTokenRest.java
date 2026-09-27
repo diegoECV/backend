@@ -20,4 +20,6 @@ public class RevokedTokenRest {
     public Mono<RevokedToken> create(@RequestBody RevokedToken obj) { return service.save(obj); }
     @PutMapping("/{id}")
     public Mono<RevokedToken> update(@PathVariable String id, @RequestBody RevokedToken obj) { return service.update(id, obj); }
+    @GetMapping("/limit/{limit}")
+    public Flux<RevokedToken> findLimited(@PathVariable int limit) { return service.findAll().take(limit); }
 }

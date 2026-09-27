@@ -20,4 +20,6 @@ public class CategoryRest {
     public Mono<Category> create(@RequestBody Category obj) { return service.save(obj); }
     @PutMapping("/{id}")
     public Mono<Category> update(@PathVariable String id, @RequestBody Category obj) { return service.update(id, obj); }
+    @GetMapping("/limit/{limit}")
+    public Flux<Category> findLimited(@PathVariable int limit) { return service.findAll().take(limit); }
 }

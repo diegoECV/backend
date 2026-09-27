@@ -20,4 +20,6 @@ public class ShipmentItemRest {
     public Mono<ShipmentItem> create(@RequestBody ShipmentItem obj) { return service.save(obj); }
     @PutMapping("/{id}")
     public Mono<ShipmentItem> update(@PathVariable Integer id, @RequestBody ShipmentItem obj) { return service.update(id, obj); }
+    @GetMapping("/limit/{limit}")
+    public Flux<ShipmentItem> findLimited(@PathVariable int limit) { return service.findAll().take(limit); }
 }

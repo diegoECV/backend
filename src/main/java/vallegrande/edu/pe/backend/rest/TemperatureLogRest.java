@@ -20,4 +20,6 @@ public class TemperatureLogRest {
     public Mono<TemperatureLog> create(@RequestBody TemperatureLog obj) { return service.save(obj); }
     @PutMapping("/{id}")
     public Mono<TemperatureLog> update(@PathVariable String id, @RequestBody TemperatureLog obj) { return service.update(id, obj); }
+    @GetMapping("/limit/{limit}")
+    public Flux<TemperatureLog> findLimited(@PathVariable int limit) { return service.findAll().take(limit); }
 }

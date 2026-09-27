@@ -20,4 +20,6 @@ public class RateLimitRest {
     public Mono<RateLimit> create(@RequestBody RateLimit obj) { return service.save(obj); }
     @PutMapping("/{id}")
     public Mono<RateLimit> update(@PathVariable String id, @RequestBody RateLimit obj) { return service.update(id, obj); }
+    @GetMapping("/limit/{limit}")
+    public Flux<RateLimit> findLimited(@PathVariable int limit) { return service.findAll().take(limit); }
 }

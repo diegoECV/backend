@@ -20,4 +20,6 @@ public class CustomsDeclarationRest {
     public Mono<CustomsDeclaration> create(@RequestBody CustomsDeclaration obj) { return service.save(obj); }
     @PutMapping("/{id}")
     public Mono<CustomsDeclaration> update(@PathVariable Integer id, @RequestBody CustomsDeclaration obj) { return service.update(id, obj); }
+    @GetMapping("/limit/{limit}")
+    public Flux<CustomsDeclaration> findLimited(@PathVariable int limit) { return service.findAll().take(limit); }
 }

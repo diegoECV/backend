@@ -20,4 +20,6 @@ public class UserRest {
     public Mono<User> create(@RequestBody User obj) { return service.save(obj); }
     @PutMapping("/{id}")
     public Mono<User> update(@PathVariable String id, @RequestBody User obj) { return service.update(id, obj); }
+    @GetMapping("/limit/{limit}")
+    public Flux<User> findLimited(@PathVariable int limit) { return service.findAll().take(limit); }
 }

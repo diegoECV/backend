@@ -32,4 +32,6 @@ public class AssignmentRest {
     public Mono<AssignmentDto> update(@PathVariable Integer id, @RequestBody AssignmentDto dto) {
         return assignmentService.update(id, dto);
     }
+    @GetMapping("/limit/{limit}")
+    public Flux<AssignmentDto> findLimited(@PathVariable int limit) { return assignmentService.findAll().take(limit); }
 }

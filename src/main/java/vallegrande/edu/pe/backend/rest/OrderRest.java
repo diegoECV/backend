@@ -32,4 +32,6 @@ public class OrderRest {
     public Mono<OrderDto> update(@PathVariable Integer id, @RequestBody OrderDto orderDto) {
         return orderService.update(id, orderDto);
     }
+    @GetMapping("/limit/{limit}")
+    public Flux<OrderDto> findLimited(@PathVariable int limit) { return orderService.findAll().take(limit); }
 }

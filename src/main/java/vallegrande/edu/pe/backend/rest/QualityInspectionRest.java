@@ -20,4 +20,6 @@ public class QualityInspectionRest {
     public Mono<QualityInspection> create(@RequestBody QualityInspection obj) { return service.save(obj); }
     @PutMapping("/{id}")
     public Mono<QualityInspection> update(@PathVariable String id, @RequestBody QualityInspection obj) { return service.update(id, obj); }
+    @GetMapping("/limit/{limit}")
+    public Flux<QualityInspection> findLimited(@PathVariable int limit) { return service.findAll().take(limit); }
 }

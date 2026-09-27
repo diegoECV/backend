@@ -20,4 +20,6 @@ public class AuditLogRest {
     public Mono<AuditLog> create(@RequestBody AuditLog obj) { return service.save(obj); }
     @PutMapping("/{id}")
     public Mono<AuditLog> update(@PathVariable Long id, @RequestBody AuditLog obj) { return service.update(id, obj); }
+    @GetMapping("/limit/{limit}")
+    public Flux<AuditLog> findLimited(@PathVariable int limit) { return service.findAll().take(limit); }
 }

@@ -20,4 +20,6 @@ public class ProviderRest {
     public Mono<Provider> create(@RequestBody Provider obj) { return service.save(obj); }
     @PutMapping("/{id}")
     public Mono<Provider> update(@PathVariable String id, @RequestBody Provider obj) { return service.update(id, obj); }
+    @GetMapping("/limit/{limit}")
+    public Flux<Provider> findLimited(@PathVariable int limit) { return service.findAll().take(limit); }
 }

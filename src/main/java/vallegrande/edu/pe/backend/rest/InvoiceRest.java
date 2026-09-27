@@ -20,4 +20,6 @@ public class InvoiceRest {
     public Mono<Invoice> create(@RequestBody Invoice obj) { return service.save(obj); }
     @PutMapping("/{id}")
     public Mono<Invoice> update(@PathVariable Integer id, @RequestBody Invoice obj) { return service.update(id, obj); }
+    @GetMapping("/limit/{limit}")
+    public Flux<Invoice> findLimited(@PathVariable int limit) { return service.findAll().take(limit); }
 }

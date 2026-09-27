@@ -20,4 +20,6 @@ public class ProductRest {
     public Mono<Product> create(@RequestBody Product obj) { return service.save(obj); }
     @PutMapping("/{id}")
     public Mono<Product> update(@PathVariable String id, @RequestBody Product obj) { return service.update(id, obj); }
+    @GetMapping("/limit/{limit}")
+    public Flux<Product> findLimited(@PathVariable int limit) { return service.findAll().take(limit); }
 }

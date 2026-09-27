@@ -20,4 +20,6 @@ public class PriceListRest {
     public Mono<PriceList> create(@RequestBody PriceList obj) { return service.save(obj); }
     @PutMapping("/{id}")
     public Mono<PriceList> update(@PathVariable String id, @RequestBody PriceList obj) { return service.update(id, obj); }
+    @GetMapping("/limit/{limit}")
+    public Flux<PriceList> findLimited(@PathVariable int limit) { return service.findAll().take(limit); }
 }

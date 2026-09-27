@@ -20,4 +20,6 @@ public class TraceabilityLogRest {
     public Mono<TraceabilityLog> create(@RequestBody TraceabilityLog obj) { return service.save(obj); }
     @PutMapping("/{id}")
     public Mono<TraceabilityLog> update(@PathVariable String id, @RequestBody TraceabilityLog obj) { return service.update(id, obj); }
+    @GetMapping("/limit/{limit}")
+    public Flux<TraceabilityLog> findLimited(@PathVariable int limit) { return service.findAll().take(limit); }
 }

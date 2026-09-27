@@ -32,4 +32,6 @@ public class BatchRest {
     public Mono<BatchDto> update(@PathVariable Integer id, @RequestBody BatchDto dto) {
         return batchService.update(id, dto);
     }
+    @GetMapping("/limit/{limit}")
+    public Flux<BatchDto> findLimited(@PathVariable int limit) { return batchService.findAll().take(limit); }
 }
