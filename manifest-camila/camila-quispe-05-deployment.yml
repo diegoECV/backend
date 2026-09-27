@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: backend-container
-        image: camila/backend-transaccional:latest
+        image: camila/backend-transaccional:v2.0
         ports:
         - containerPort: 9090
         envFrom:

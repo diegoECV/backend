@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: backend-container
-        image: lizeth/backend-transaccional:latest
+        image: lizeth/backend-transaccional:v2.0
         ports:
         - containerPort: 9090
         envFrom:

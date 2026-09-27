@@ -16,7 +16,8 @@ spec:
       containers:
       - name: backend-container
         # Asegúrate de construir tu imagen y subirla a Docker Hub con este nombre
-        image: diegoecv/backend-transaccional:latest
+        image: diegoecv/backend-transaccional:v2.0
+        imagePullPolicy: Never
         ports:
         - containerPort: 9090
         envFrom:
