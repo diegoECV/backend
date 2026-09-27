@@ -4,5 +4,5 @@ metadata:
   name: lizeth-quispe-configmap
   namespace: lizeth-quispe-ns
 data:
-  SPRING_R2DBC_URL: "r2dbc:sqlserver://host.minikube.internal:1433;database=Visons;encrypt=false"
+  SPRING_R2DBC_URL: "r2dbc:sqlserver://192.168.49.1:1433;database=Visons;encrypt=false"
   SPRING_R2DBC_USERNAME: "sa"
