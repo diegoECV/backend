@@ -2,6 +2,7 @@ package vallegrande.edu.pe.backend.config;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
+import com.mongodb.connection.ClusterConnectionMode;
 import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoClients;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +31,7 @@ public class MongoConfig extends AbstractReactiveMongoConfiguration {
         // Force parsing the URI, overriding any default cluster behavior!
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(new ConnectionString(mongoUri))
+                .applyToClusterSettings(builder -> builder.mode(ClusterConnectionMode.SINGLE))
                 .build();
         return MongoClients.create(settings);
     }
