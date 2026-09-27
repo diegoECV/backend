@@ -1,0 +1,35 @@
+package vallegrande.edu.pe.backend.rest;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import vallegrande.edu.pe.backend.dto.BatchDto;
+import vallegrande.edu.pe.backend.service.BatchService;
+
+@RestController
+@RequestMapping("/api/v1/batches")
+@RequiredArgsConstructor
+public class BatchRest {
+    private final BatchService batchService;
+
+    @GetMapping
+    public Flux<BatchDto> findAll() {
+        return batchService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public Mono<BatchDto> findById(@PathVariable Integer id) {
+        return batchService.findById(id);
+    }
+
+    @PostMapping
+    public Mono<BatchDto> create(@RequestBody BatchDto dto) {
+        return batchService.save(dto);
+    }
+
+    @PutMapping("/{id}")
+    public Mono<BatchDto> update(@PathVariable Integer id, @RequestBody BatchDto dto) {
+        return batchService.update(id, dto);
+    }
+}
