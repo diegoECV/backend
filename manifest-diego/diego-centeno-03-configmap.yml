@@ -4,5 +4,5 @@ metadata:
   name: diego-centeno-configmap
   namespace: diego-centeno-ns
 data:
-  SPRING_R2DBC_URL: "r2dbc:sqlserver://sqlserver:1433;database=Visons;encrypt=false"
+  SPRING_R2DBC_URL: "r2dbc:sqlserver://host.minikube.internal:1433;database=Visons;encrypt=false"
   SPRING_R2DBC_USERNAME: "sa"
