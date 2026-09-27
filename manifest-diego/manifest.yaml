@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-diego
+  labels:
+    app: backend-diego
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-diego
+  template:
+    metadata:
+      labels:
+        app: backend-diego
+    spec:
+      containers:
+      - name: backend
+        # Deberás cambiar esto por la imagen real tras construir y pushear a tu registro (ej. Docker Hub)
+        image: diegoecv/backend-transaccional:latest
+        ports:
+        - containerPort: 8080
+        env:
+        # Variables de entorno para conectarse a las BD (asumiendo nombres de red estándar)
+        - name: SPRING_R2DBC_URL
+          value: "r2dbc:sqlserver://sqlserver:1433;database=Visons;encrypt=false"
+        - name: SPRING_R2DBC_USERNAME
+          value: "sa"
+        - name: SPRING_R2DBC_PASSWORD
+          value: "SuperSecretPass123!"
+        - name: SPRING_DATA_MONGODB_URI
+          value: "mongodb://admin:admin123@mongodb:27017/Visons?authSource=admin"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-diego-service
+spec:
+  type: ClusterIP
+  selector:
+    app: backend-diego
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080

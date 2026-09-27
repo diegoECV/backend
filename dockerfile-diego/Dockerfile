@@ -9,12 +9,11 @@ FROM eclipse-temurin:25-jre-noble
 ARG RELEASE_VERSION=development
 ARG GIT_SHA=unknown
 ENV RELEASE_VERSION=$RELEASE_VERSION GIT_SHA=$GIT_SHA
-LABEL org.opencontainers.image.title="Backend Transaccional" \
+LABEL org.opencontainers.image.title="Backend Transaccional - Diego" \
       org.opencontainers.image.version="$RELEASE_VERSION" \
       org.opencontainers.image.revision="$GIT_SHA" \
       org.opencontainers.image.source="https://github.com/diegoECV/backend"
 WORKDIR /app
-# Copiamos el JAR generado sin importar el nombre exacto que le ponga Maven
 COPY --from=build --chown=10001:10001 /src/target/*.jar /app/backend.jar
 USER 10001:10001
 EXPOSE 8080
