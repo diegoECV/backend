@@ -29,6 +29,7 @@ public class SecurityConfig {
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(HttpMethod.OPTIONS).permitAll()
                         .pathMatchers("/api/v1/auth/**").permitAll()
+                        .pathMatchers("/v3/api-docs/**", "/webjars/swagger-ui/**", "/swagger-ui/**", "/webjars/**").permitAll()
                         .anyExchange().authenticated()
                 )
                 .build();
