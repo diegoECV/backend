@@ -13,7 +13,7 @@ public class CategoryRest {
     private final CategoryService service;
 
     @GetMapping
-    public Flux<Category> findAll() { return service.findAll(); }
+    public Flux<Category> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) { return limit > 0 ? service.findAll().take(limit) : service.findAll(); }
     @GetMapping("/{id}")
     public Mono<Category> findById(@PathVariable String id) { return service.findById(id); }
     @PostMapping

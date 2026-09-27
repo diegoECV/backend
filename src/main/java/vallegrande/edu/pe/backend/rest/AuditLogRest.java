@@ -13,7 +13,7 @@ public class AuditLogRest {
     private final AuditLogService service;
 
     @GetMapping
-    public Flux<AuditLog> findAll() { return service.findAll(); }
+    public Flux<AuditLog> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) { return limit > 0 ? service.findAll().take(limit) : service.findAll(); }
     @GetMapping("/{id}")
     public Mono<AuditLog> findById(@PathVariable Long id) { return service.findById(id); }
     @PostMapping

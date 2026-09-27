@@ -13,7 +13,7 @@ public class ClientRest {
     private final ClientService service;
 
     @GetMapping
-    public Flux<Client> findAll() { return service.findAll(); }
+    public Flux<Client> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) { return limit > 0 ? service.findAll().take(limit) : service.findAll(); }
     @GetMapping("/{id}")
     public Mono<Client> findById(@PathVariable String id) { return service.findById(id); }
     @PostMapping

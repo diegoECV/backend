@@ -13,7 +13,7 @@ public class RateLimitRest {
     private final RateLimitService service;
 
     @GetMapping
-    public Flux<RateLimit> findAll() { return service.findAll(); }
+    public Flux<RateLimit> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) { return limit > 0 ? service.findAll().take(limit) : service.findAll(); }
     @GetMapping("/{id}")
     public Mono<RateLimit> findById(@PathVariable String id) { return service.findById(id); }
     @PostMapping

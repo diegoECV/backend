@@ -13,7 +13,7 @@ public class QualityInspectionRest {
     private final QualityInspectionService service;
 
     @GetMapping
-    public Flux<QualityInspection> findAll() { return service.findAll(); }
+    public Flux<QualityInspection> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) { return limit > 0 ? service.findAll().take(limit) : service.findAll(); }
     @GetMapping("/{id}")
     public Mono<QualityInspection> findById(@PathVariable String id) { return service.findById(id); }
     @PostMapping

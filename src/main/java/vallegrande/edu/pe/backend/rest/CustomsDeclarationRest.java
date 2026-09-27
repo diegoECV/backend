@@ -13,7 +13,7 @@ public class CustomsDeclarationRest {
     private final CustomsDeclarationService service;
 
     @GetMapping
-    public Flux<CustomsDeclaration> findAll() { return service.findAll(); }
+    public Flux<CustomsDeclaration> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) { return limit > 0 ? service.findAll().take(limit) : service.findAll(); }
     @GetMapping("/{id}")
     public Mono<CustomsDeclaration> findById(@PathVariable Integer id) { return service.findById(id); }
     @PostMapping

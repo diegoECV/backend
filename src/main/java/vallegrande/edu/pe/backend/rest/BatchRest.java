@@ -14,8 +14,8 @@ public class BatchRest {
     private final BatchService batchService;
 
     @GetMapping
-    public Flux<BatchDto> findAll() {
-        return batchService.findAll();
+    public Flux<BatchDto> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) {
+        return limit > 0 ? batchService.findAll().take(limit) : batchService.findAll();
     }
 
     @GetMapping("/{id}")

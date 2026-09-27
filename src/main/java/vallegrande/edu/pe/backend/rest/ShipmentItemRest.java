@@ -13,7 +13,7 @@ public class ShipmentItemRest {
     private final ShipmentItemService service;
 
     @GetMapping
-    public Flux<ShipmentItem> findAll() { return service.findAll(); }
+    public Flux<ShipmentItem> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) { return limit > 0 ? service.findAll().take(limit) : service.findAll(); }
     @GetMapping("/{id}")
     public Mono<ShipmentItem> findById(@PathVariable Integer id) { return service.findById(id); }
     @PostMapping

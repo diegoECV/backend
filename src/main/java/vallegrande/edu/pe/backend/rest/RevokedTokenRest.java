@@ -13,7 +13,7 @@ public class RevokedTokenRest {
     private final RevokedTokenService service;
 
     @GetMapping
-    public Flux<RevokedToken> findAll() { return service.findAll(); }
+    public Flux<RevokedToken> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) { return limit > 0 ? service.findAll().take(limit) : service.findAll(); }
     @GetMapping("/{id}")
     public Mono<RevokedToken> findById(@PathVariable String id) { return service.findById(id); }
     @PostMapping

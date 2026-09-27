@@ -14,8 +14,8 @@ public class AssignmentRest {
     private final AssignmentService assignmentService;
 
     @GetMapping
-    public Flux<AssignmentDto> findAll() {
-        return assignmentService.findAll();
+    public Flux<AssignmentDto> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) {
+        return limit > 0 ? assignmentService.findAll().take(limit) : assignmentService.findAll();
     }
 
     @GetMapping("/{id}")

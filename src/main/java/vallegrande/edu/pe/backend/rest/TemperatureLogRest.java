@@ -13,7 +13,7 @@ public class TemperatureLogRest {
     private final TemperatureLogService service;
 
     @GetMapping
-    public Flux<TemperatureLog> findAll() { return service.findAll(); }
+    public Flux<TemperatureLog> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) { return limit > 0 ? service.findAll().take(limit) : service.findAll(); }
     @GetMapping("/{id}")
     public Mono<TemperatureLog> findById(@PathVariable String id) { return service.findById(id); }
     @PostMapping

@@ -13,7 +13,7 @@ public class TraceabilityLogRest {
     private final TraceabilityLogService service;
 
     @GetMapping
-    public Flux<TraceabilityLog> findAll() { return service.findAll(); }
+    public Flux<TraceabilityLog> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) { return limit > 0 ? service.findAll().take(limit) : service.findAll(); }
     @GetMapping("/{id}")
     public Mono<TraceabilityLog> findById(@PathVariable String id) { return service.findById(id); }
     @PostMapping

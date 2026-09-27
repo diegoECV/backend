@@ -13,7 +13,7 @@ public class ProviderRest {
     private final ProviderService service;
 
     @GetMapping
-    public Flux<Provider> findAll() { return service.findAll(); }
+    public Flux<Provider> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) { return limit > 0 ? service.findAll().take(limit) : service.findAll(); }
     @GetMapping("/{id}")
     public Mono<Provider> findById(@PathVariable String id) { return service.findById(id); }
     @PostMapping

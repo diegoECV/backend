@@ -13,7 +13,7 @@ public class CertificateRest {
     private final CertificateService service;
 
     @GetMapping
-    public Flux<Certificate> findAll() { return service.findAll(); }
+    public Flux<Certificate> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) { return limit > 0 ? service.findAll().take(limit) : service.findAll(); }
     @GetMapping("/{id}")
     public Mono<Certificate> findById(@PathVariable Integer id) { return service.findById(id); }
     @PostMapping

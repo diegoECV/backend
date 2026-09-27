@@ -13,7 +13,7 @@ public class InvoiceRest {
     private final InvoiceService service;
 
     @GetMapping
-    public Flux<Invoice> findAll() { return service.findAll(); }
+    public Flux<Invoice> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) { return limit > 0 ? service.findAll().take(limit) : service.findAll(); }
     @GetMapping("/{id}")
     public Mono<Invoice> findById(@PathVariable Integer id) { return service.findById(id); }
     @PostMapping

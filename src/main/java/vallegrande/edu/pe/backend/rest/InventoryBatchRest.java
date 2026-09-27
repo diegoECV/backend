@@ -13,7 +13,7 @@ public class InventoryBatchRest {
     private final InventoryBatchService service;
 
     @GetMapping
-    public Flux<InventoryBatch> findAll() { return service.findAll(); }
+    public Flux<InventoryBatch> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) { return limit > 0 ? service.findAll().take(limit) : service.findAll(); }
     @GetMapping("/{id}")
     public Mono<InventoryBatch> findById(@PathVariable String id) { return service.findById(id); }
     @PostMapping

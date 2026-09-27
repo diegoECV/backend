@@ -13,7 +13,7 @@ public class ProductRest {
     private final ProductService service;
 
     @GetMapping
-    public Flux<Product> findAll() { return service.findAll(); }
+    public Flux<Product> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) { return limit > 0 ? service.findAll().take(limit) : service.findAll(); }
     @GetMapping("/{id}")
     public Mono<Product> findById(@PathVariable String id) { return service.findById(id); }
     @PostMapping

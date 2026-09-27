@@ -13,7 +13,7 @@ public class EmailVerificationRest {
     private final EmailVerificationService service;
 
     @GetMapping
-    public Flux<EmailVerification> findAll() { return service.findAll(); }
+    public Flux<EmailVerification> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) { return limit > 0 ? service.findAll().take(limit) : service.findAll(); }
     @GetMapping("/{id}")
     public Mono<EmailVerification> findById(@PathVariable String id) { return service.findById(id); }
     @PostMapping

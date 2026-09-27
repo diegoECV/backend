@@ -14,8 +14,8 @@ public class OrderRest {
     private final OrderService orderService;
 
     @GetMapping
-    public Flux<OrderDto> findAll() {
-        return orderService.findAll();
+    public Flux<OrderDto> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) {
+        return limit > 0 ? orderService.findAll().take(limit) : orderService.findAll();
     }
 
     @GetMapping("/{id}")
