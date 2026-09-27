@@ -1,0 +1,23 @@
+package vallegrande.edu.pe.backend.rest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import vallegrande.edu.pe.backend.model.Product;
+import vallegrande.edu.pe.backend.service.ProductService;
+
+@RestController
+@RequestMapping("/api/v1/products")
+@RequiredArgsConstructor
+public class ProductRest {
+    private final ProductService service;
+
+    @GetMapping
+    public Flux<Product> findAll() { return service.findAll(); }
+    @GetMapping("/{id}")
+    public Mono<Product> findById(@PathVariable String id) { return service.findById(id); }
+    @PostMapping
+    public Mono<Product> create(@RequestBody Product obj) { return service.save(obj); }
+    @PutMapping("/{id}")
+    public Mono<Product> update(@PathVariable String id, @RequestBody Product obj) { return service.update(id, obj); }
+}
