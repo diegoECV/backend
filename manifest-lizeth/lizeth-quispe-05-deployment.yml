@@ -17,7 +17,7 @@ spec:
       - name: backend-container
         image: lizeth/backend-transaccional:latest
         ports:
-        - containerPort: 8080
+        - containerPort: 9090
         envFrom:
         - configMapRef:
             name: lizeth-quispe-configmap

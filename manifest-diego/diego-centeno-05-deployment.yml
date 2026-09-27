@@ -18,7 +18,7 @@ spec:
         # Asegúrate de construir tu imagen y subirla a Docker Hub con este nombre
         image: diegoecv/backend-transaccional:latest
         ports:
-        - containerPort: 8080
+        - containerPort: 9090
         envFrom:
         - configMapRef:
             name: diego-centeno-configmap

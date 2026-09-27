@@ -17,7 +17,7 @@ spec:
       - name: backend-container
         image: camila/backend-transaccional:latest
         ports:
-        - containerPort: 8080
+        - containerPort: 9090
         envFrom:
         - configMapRef:
             name: camila-quispe-configmap
