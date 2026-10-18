@@ -29,10 +29,6 @@ public class MongoConfig extends AbstractReactiveMongoConfiguration {
     @Bean
     @Override
     public MongoClient reactiveMongoClient() {
-        System.out.println("=========================================");
-        System.out.println("USING MONGO URI: " + mongoUri);
-        System.out.println("=========================================");
-        // Force parsing the URI, overriding any default cluster behavior!
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(new ConnectionString(mongoUri))
                 .applyToClusterSettings(builder -> builder.mode(ClusterConnectionMode.SINGLE))

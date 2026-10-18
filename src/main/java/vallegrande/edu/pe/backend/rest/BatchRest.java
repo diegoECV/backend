@@ -1,6 +1,7 @@
 package vallegrande.edu.pe.backend.rest;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -32,6 +33,4 @@ public class BatchRest {
     public Mono<BatchDto> update(@PathVariable Integer id, @RequestBody BatchDto dto) {
         return batchService.update(id, dto);
     }
-    @GetMapping("/limit/{limit}")
-    public Flux<BatchDto> findLimited(@PathVariable int limit) { return batchService.findAll().take(limit); }
 }

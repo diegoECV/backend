@@ -15,7 +15,11 @@ import java.util.List;
 @AllArgsConstructor
 public class BatchDto {
     private Integer batchId;
-    private String productCode;
+    private String productId;        // renombrado de productCode → productId
+    private String providerId;
+    private String fieldName;
+    private LocalDate harvestDate;
+    private LocalDate packingDate;
     private LocalDate productionDate;
     private LocalDate expirationDate;
     private List<InspectionEvent> inspections;

@@ -16,5 +16,5 @@ LABEL org.opencontainers.image.title="Backend Transaccional - Diego" \
 WORKDIR /app
 COPY --from=build --chown=10001:10001 /src/target/*.jar /app/backend.jar
 USER 10001:10001
-EXPOSE 8080
+EXPOSE 9090
 ENTRYPOINT ["java", "-jar", "/app/backend.jar"]

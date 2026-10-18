@@ -1,5 +1,6 @@
 package vallegrande.edu.pe.backend.rest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -7,7 +8,7 @@ import vallegrande.edu.pe.backend.model.PriceList;
 import vallegrande.edu.pe.backend.service.PriceListService;
 
 @RestController
-@RequestMapping("/api/v1/price_lists")
+@RequestMapping("/api/v1/price-lists")
 @RequiredArgsConstructor
 public class PriceListRest {
     private final PriceListService service;
@@ -17,9 +18,8 @@ public class PriceListRest {
     @GetMapping("/{id}")
     public Mono<PriceList> findById(@PathVariable String id) { return service.findById(id); }
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Mono<PriceList> create(@RequestBody PriceList obj) { return service.save(obj); }
     @PutMapping("/{id}")
     public Mono<PriceList> update(@PathVariable String id, @RequestBody PriceList obj) { return service.update(id, obj); }
-    @GetMapping("/limit/{limit}")
-    public Flux<PriceList> findLimited(@PathVariable int limit) { return service.findAll().take(limit); }
 }

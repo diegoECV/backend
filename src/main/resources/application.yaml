@@ -5,9 +5,39 @@ spring:
   application:
     name: backend-transaccional
   r2dbc:
-    url: ${SPRING_R2DBC_URL:r2dbc:sqlserver://192.168.49.1:1433;database=Visons;encrypt=false}
+    url: ${SPRING_R2DBC_URL:r2dbc:sqlserver://visons-db.cjwoansjw85b.us-east-1.rds.amazonaws.com:1433;database=Visons;encrypt=true;trustServerCertificate=true}
     username: ${SPRING_R2DBC_USERNAME:sa}
-    password: ${SPRING_R2DBC_PASSWORD:Password123!}
+    password: ${SPRING_R2DBC_PASSWORD:diego1416}
   data:
     mongodb:
-      uri: ${SPRING_DATA_MONGODB_URI:mongodb://admin:adminpassword@192.168.49.1:27017/Visons?authSource=admin&directConnection=true}
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb+srv://diego1416:diego1416@cluster0.1qojbcp.mongodb.net/Visons?appName=Cluster0}
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID:your-google-client-id}
+            client-secret: ${GOOGLE_CLIENT_SECRET:your-google-client-secret}
+            scope:
+              - email
+              - profile
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:diegoedmilsoncentenovivas@gmail.com}
+    password: ${MAIL_PASSWORD:TU_APP_PASSWORD_GMAIL_AQUI}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:EsteEsUnSecretoMuyLargoParaJWT2026VisonsSAC}
+    expiration-ms: ${JWT_EXPIRATION_MS:36000000}  # 10 horas
+  frontend-url: ${FRONTEND_URL:http://localhost:5173}

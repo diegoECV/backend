@@ -16,8 +16,14 @@ import java.util.List;
 public class AssignmentDto {
     private Integer assignmentId;
     private Integer orderId;
+    private String assignmentType;   // campo faltante
     private String assignedTo;
-    private LocalDate assignmentDate;
+    private String assignedBy;       // campo faltante
+    private String priority;         // campo faltante
     private String status;
+    private String notes;            // campo faltante
+    private LocalDate assignmentDate;
+    private LocalDate dueDate;       // campo faltante
+    private LocalDate completionDate; // campo faltante
     private List<CustodyEvent> custodyEvents;
 }

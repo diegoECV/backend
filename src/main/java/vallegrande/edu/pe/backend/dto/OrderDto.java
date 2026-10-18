@@ -21,5 +21,9 @@ public class OrderDto {
     private String incoterm;
     private String status;
     private String statusDescription;
+    private String currency;              // campo faltante
+    private String paymentTerms;          // campo faltante
+    private String destinationPort;       // campo faltante
+    private LocalDate estimatedShippingDate; // campo faltante
     private List<TrackingEvent> trackingEvents;
 }

@@ -1,5 +1,6 @@
 package vallegrande.edu.pe.backend.rest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -7,7 +8,7 @@ import vallegrande.edu.pe.backend.model.RateLimit;
 import vallegrande.edu.pe.backend.service.RateLimitService;
 
 @RestController
-@RequestMapping("/api/v1/rate_limits")
+@RequestMapping("/api/v1/rate-limits")
 @RequiredArgsConstructor
 public class RateLimitRest {
     private final RateLimitService service;
@@ -17,9 +18,8 @@ public class RateLimitRest {
     @GetMapping("/{id}")
     public Mono<RateLimit> findById(@PathVariable String id) { return service.findById(id); }
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Mono<RateLimit> create(@RequestBody RateLimit obj) { return service.save(obj); }
     @PutMapping("/{id}")
     public Mono<RateLimit> update(@PathVariable String id, @RequestBody RateLimit obj) { return service.update(id, obj); }
-    @GetMapping("/limit/{limit}")
-    public Flux<RateLimit> findLimited(@PathVariable int limit) { return service.findAll().take(limit); }
 }

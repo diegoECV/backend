@@ -1,17 +1,23 @@
 package vallegrande.edu.pe.backend.rest;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import vallegrande.edu.pe.backend.dto.OrderDto;
+import vallegrande.edu.pe.backend.service.OrderReportService;
 import vallegrande.edu.pe.backend.service.OrderService;
 
 @RestController
 @RequestMapping("/api/v1/orders")
 @RequiredArgsConstructor
 public class OrderRest {
+
     private final OrderService orderService;
+    private final OrderReportService reportService;
 
     @GetMapping
     public Flux<OrderDto> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) {
@@ -32,6 +38,30 @@ public class OrderRest {
     public Mono<OrderDto> update(@PathVariable Integer id, @RequestBody OrderDto orderDto) {
         return orderService.update(id, orderDto);
     }
-    @GetMapping("/limit/{limit}")
-    public Flux<OrderDto> findLimited(@PathVariable int limit) { return orderService.findAll().take(limit); }
+
+    // --- REPORTES Y EXPORTACIÓN ---
+
+    @GetMapping(value = "/export/excel", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public Mono<ResponseEntity<byte[]>> exportExcel() {
+        return reportService.exportToExcel()
+                .map(bytes -> ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=pedidos.xlsx")
+                        .body(bytes));
+    }
+
+    @GetMapping(value = "/export/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
+    public Mono<ResponseEntity<byte[]>> exportPdf() {
+        return reportService.exportToPdf()
+                .map(bytes -> ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=pedidos.pdf")
+                        .body(bytes));
+    }
+
+    @GetMapping(value = "/export/csv", produces = "text/csv")
+    public Mono<ResponseEntity<byte[]>> exportCsv() {
+        return reportService.exportToCsv()
+                .map(bytes -> ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=pedidos.csv")
+                        .body(bytes));
+    }
 }

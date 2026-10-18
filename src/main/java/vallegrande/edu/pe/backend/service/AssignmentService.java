@@ -33,9 +33,15 @@ public class AssignmentService {
     public Mono<AssignmentDto> save(AssignmentDto dto) {
         Assignment assignment = Assignment.builder()
                 .orderId(dto.getOrderId())
+                .assignmentType(dto.getAssignmentType())
                 .assignedTo(dto.getAssignedTo())
-                .assignmentDate(dto.getAssignmentDate())
+                .assignedBy(dto.getAssignedBy())
+                .priority(dto.getPriority())
                 .status(dto.getStatus())
+                .notes(dto.getNotes())
+                .assignmentDate(dto.getAssignmentDate())
+                .dueDate(dto.getDueDate())
+                .completionDate(dto.getCompletionDate())
                 .build();
 
         return assignmentRepository.save(assignment)
@@ -53,9 +59,15 @@ public class AssignmentService {
         return assignmentRepository.findById(id)
                 .flatMap(existingAssignment -> {
                     existingAssignment.setOrderId(dto.getOrderId());
+                    existingAssignment.setAssignmentType(dto.getAssignmentType());
                     existingAssignment.setAssignedTo(dto.getAssignedTo());
-                    existingAssignment.setAssignmentDate(dto.getAssignmentDate());
+                    existingAssignment.setAssignedBy(dto.getAssignedBy());
+                    existingAssignment.setPriority(dto.getPriority());
                     existingAssignment.setStatus(dto.getStatus());
+                    existingAssignment.setNotes(dto.getNotes());
+                    existingAssignment.setAssignmentDate(dto.getAssignmentDate());
+                    existingAssignment.setDueDate(dto.getDueDate());
+                    existingAssignment.setCompletionDate(dto.getCompletionDate());
                     return assignmentRepository.save(existingAssignment);
                 })
                 .flatMap(updatedAssignment -> assignmentTrackingRepository.findByAssignmentId(id)
@@ -74,9 +86,15 @@ public class AssignmentService {
         return AssignmentDto.builder()
                 .assignmentId(assignment.getAssignmentId())
                 .orderId(assignment.getOrderId())
+                .assignmentType(assignment.getAssignmentType())
                 .assignedTo(assignment.getAssignedTo())
-                .assignmentDate(assignment.getAssignmentDate())
+                .assignedBy(assignment.getAssignedBy())
+                .priority(assignment.getPriority())
                 .status(assignment.getStatus())
+                .notes(assignment.getNotes())
+                .assignmentDate(assignment.getAssignmentDate())
+                .dueDate(assignment.getDueDate())
+                .completionDate(assignment.getCompletionDate())
                 .custodyEvents(tracking.getEvents())
                 .build();
     }

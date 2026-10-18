@@ -32,7 +32,11 @@ public class BatchService {
 
     public Mono<BatchDto> save(BatchDto dto) {
         Batch batch = Batch.builder()
-                .productCode(dto.getProductCode())
+                .productId(dto.getProductId())
+                .providerId(dto.getProviderId())
+                .fieldName(dto.getFieldName())
+                .harvestDate(dto.getHarvestDate())
+                .packingDate(dto.getPackingDate())
                 .productionDate(dto.getProductionDate())
                 .expirationDate(dto.getExpirationDate())
                 .build();
@@ -51,7 +55,11 @@ public class BatchService {
     public Mono<BatchDto> update(Integer id, BatchDto dto) {
         return batchRepository.findById(id)
                 .flatMap(existingBatch -> {
-                    existingBatch.setProductCode(dto.getProductCode());
+                    existingBatch.setProductId(dto.getProductId());
+                    existingBatch.setProviderId(dto.getProviderId());
+                    existingBatch.setFieldName(dto.getFieldName());
+                    existingBatch.setHarvestDate(dto.getHarvestDate());
+                    existingBatch.setPackingDate(dto.getPackingDate());
                     existingBatch.setProductionDate(dto.getProductionDate());
                     existingBatch.setExpirationDate(dto.getExpirationDate());
                     return batchRepository.save(existingBatch);
@@ -71,7 +79,11 @@ public class BatchService {
     private BatchDto buildDto(Batch batch, BatchInspection inspection) {
         return BatchDto.builder()
                 .batchId(batch.getBatchId())
-                .productCode(batch.getProductCode())
+                .productId(batch.getProductId())
+                .providerId(batch.getProviderId())
+                .fieldName(batch.getFieldName())
+                .harvestDate(batch.getHarvestDate())
+                .packingDate(batch.getPackingDate())
                 .productionDate(batch.getProductionDate())
                 .expirationDate(batch.getExpirationDate())
                 .inspections(inspection.getInspections())

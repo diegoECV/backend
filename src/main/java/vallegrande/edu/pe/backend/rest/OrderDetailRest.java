@@ -1,5 +1,6 @@
 package vallegrande.edu.pe.backend.rest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -7,7 +8,7 @@ import vallegrande.edu.pe.backend.model.OrderDetail;
 import vallegrande.edu.pe.backend.service.OrderDetailService;
 
 @RestController
-@RequestMapping("/api/v1/orderdetails")
+@RequestMapping("/api/v1/order-details")
 @RequiredArgsConstructor
 public class OrderDetailRest {
     private final OrderDetailService service;
@@ -17,9 +18,8 @@ public class OrderDetailRest {
     @GetMapping("/{id}")
     public Mono<OrderDetail> findById(@PathVariable Integer id) { return service.findById(id); }
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Mono<OrderDetail> create(@RequestBody OrderDetail obj) { return service.save(obj); }
     @PutMapping("/{id}")
     public Mono<OrderDetail> update(@PathVariable Integer id, @RequestBody OrderDetail obj) { return service.update(id, obj); }
-    @GetMapping("/limit/{limit}")
-    public Flux<OrderDetail> findLimited(@PathVariable int limit) { return service.findAll().take(limit); }
 }

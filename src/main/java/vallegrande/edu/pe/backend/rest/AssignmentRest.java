@@ -1,6 +1,7 @@
 package vallegrande.edu.pe.backend.rest;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -32,6 +33,4 @@ public class AssignmentRest {
     public Mono<AssignmentDto> update(@PathVariable Integer id, @RequestBody AssignmentDto dto) {
         return assignmentService.update(id, dto);
     }
-    @GetMapping("/limit/{limit}")
-    public Flux<AssignmentDto> findLimited(@PathVariable int limit) { return assignmentService.findAll().take(limit); }
 }

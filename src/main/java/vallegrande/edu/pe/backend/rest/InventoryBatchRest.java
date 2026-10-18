@@ -1,5 +1,6 @@
 package vallegrande.edu.pe.backend.rest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -7,7 +8,7 @@ import vallegrande.edu.pe.backend.model.InventoryBatch;
 import vallegrande.edu.pe.backend.service.InventoryBatchService;
 
 @RestController
-@RequestMapping("/api/v1/inventory_batches")
+@RequestMapping("/api/v1/inventory-batches")
 @RequiredArgsConstructor
 public class InventoryBatchRest {
     private final InventoryBatchService service;
@@ -17,9 +18,8 @@ public class InventoryBatchRest {
     @GetMapping("/{id}")
     public Mono<InventoryBatch> findById(@PathVariable String id) { return service.findById(id); }
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Mono<InventoryBatch> create(@RequestBody InventoryBatch obj) { return service.save(obj); }
     @PutMapping("/{id}")
     public Mono<InventoryBatch> update(@PathVariable String id, @RequestBody InventoryBatch obj) { return service.update(id, obj); }
-    @GetMapping("/limit/{limit}")
-    public Flux<InventoryBatch> findLimited(@PathVariable int limit) { return service.findAll().take(limit); }
 }

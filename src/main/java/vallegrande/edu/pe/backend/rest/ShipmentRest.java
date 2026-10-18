@@ -1,5 +1,6 @@
 package vallegrande.edu.pe.backend.rest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -17,9 +18,8 @@ public class ShipmentRest {
     @GetMapping("/{id}")
     public Mono<Shipment> findById(@PathVariable Integer id) { return service.findById(id); }
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Mono<Shipment> create(@RequestBody Shipment obj) { return service.save(obj); }
     @PutMapping("/{id}")
     public Mono<Shipment> update(@PathVariable Integer id, @RequestBody Shipment obj) { return service.update(id, obj); }
-    @GetMapping("/limit/{limit}")
-    public Flux<Shipment> findLimited(@PathVariable int limit) { return service.findAll().take(limit); }
 }

@@ -1,13 +1,13 @@
 package vallegrande.edu.pe.backend.model;
+import java.time.LocalDate;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
-
-import java.time.LocalDate;
 
 @Data
 @Builder
@@ -23,4 +23,8 @@ public class Order {
     private String incoterm;
     private String status;
     private String statusDescription;
+    private String currency;
+    private String paymentTerms;
+    private String destinationPort;
+    private LocalDate estimatedShippingDate;
 }
