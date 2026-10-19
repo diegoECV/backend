@@ -14,11 +14,15 @@ import vallegrande.edu.pe.backend.service.ClientService;
 
 @RestController
 @RequestMapping("/api/v1/clients")
-@RequiredArgsConstructor
 public class ClientRest {
 
     private final ClientService service;
     private final ClientReportService reportService;
+
+    public ClientRest(ClientService service, ClientReportService reportService) {
+        this.service = service;
+        this.reportService = reportService;
+    }
 
     @GetMapping
     public Flux<Client> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) {
@@ -39,6 +43,12 @@ public class ClientRest {
     @PutMapping("/{id}")
     public Mono<Client> update(@PathVariable String id, @RequestBody Client obj) {
         return service.update(id, obj);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Mono<Void> delete(@PathVariable String id) {
+        return service.deleteById(id);
     }
 
     // --- REPORTES Y EXPORTACIÓN ---

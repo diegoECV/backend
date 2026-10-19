@@ -9,9 +9,12 @@ import vallegrande.edu.pe.backend.service.AuditLogService;
 
 @RestController
 @RequestMapping("/api/v1/audit-logs")
-@RequiredArgsConstructor
 public class AuditLogRest {
     private final AuditLogService service;
+
+    public AuditLogRest(AuditLogService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public Flux<AuditLog> findAll() { return service.findAll(); }
@@ -25,4 +28,8 @@ public class AuditLogRest {
 
     @PutMapping("/{id}")
     public Mono<AuditLog> update(@PathVariable Long id, @RequestBody AuditLog obj) { return service.update(id, obj); }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Mono<Void> deleteById(@PathVariable Long id) { return service.deleteById(id); }
 }

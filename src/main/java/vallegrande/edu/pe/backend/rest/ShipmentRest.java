@@ -9,9 +9,12 @@ import vallegrande.edu.pe.backend.service.ShipmentService;
 
 @RestController
 @RequestMapping("/api/v1/shipments")
-@RequiredArgsConstructor
 public class ShipmentRest {
     private final ShipmentService service;
+
+    public ShipmentRest(ShipmentService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public Flux<Shipment> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) { return limit > 0 ? service.findAll().take(limit) : service.findAll(); }
@@ -22,4 +25,7 @@ public class ShipmentRest {
     public Mono<Shipment> create(@RequestBody Shipment obj) { return service.save(obj); }
     @PutMapping("/{id}")
     public Mono<Shipment> update(@PathVariable Integer id, @RequestBody Shipment obj) { return service.update(id, obj); }
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Mono<Void> delete(@PathVariable Integer id) { return service.deleteById(id); }
 }

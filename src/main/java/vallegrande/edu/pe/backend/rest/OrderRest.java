@@ -2,6 +2,7 @@ package vallegrande.edu.pe.backend.rest;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +14,15 @@ import vallegrande.edu.pe.backend.service.OrderService;
 
 @RestController
 @RequestMapping("/api/v1/orders")
-@RequiredArgsConstructor
 public class OrderRest {
 
     private final OrderService orderService;
     private final OrderReportService reportService;
+
+    public OrderRest(OrderService orderService, OrderReportService reportService) {
+        this.orderService = orderService;
+        this.reportService = reportService;
+    }
 
     @GetMapping
     public Flux<OrderDto> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) {
@@ -30,6 +35,7 @@ public class OrderRest {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Mono<OrderDto> create(@RequestBody OrderDto orderDto) {
         return orderService.save(orderDto);
     }
@@ -37,6 +43,12 @@ public class OrderRest {
     @PutMapping("/{id}")
     public Mono<OrderDto> update(@PathVariable Integer id, @RequestBody OrderDto orderDto) {
         return orderService.update(id, orderDto);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Mono<Void> delete(@PathVariable Integer id) {
+        return orderService.deleteById(id);
     }
 
     // --- REPORTES Y EXPORTACIÓN ---

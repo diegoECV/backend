@@ -11,10 +11,13 @@ import vallegrande.edu.pe.backend.util.ReportExportUtil;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class UserReportService {
 
     private final UserRepository userRepository;
+
+    public UserReportService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     private static final String[] HEADERS = {
         "ID", "Usuario", "Nombre Completo", "Email", "Teléfono", "Rol", "Departamento", "Estado", "Último Acceso"

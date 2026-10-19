@@ -14,11 +14,15 @@ import vallegrande.edu.pe.backend.service.UserService;
 
 @RestController
 @RequestMapping("/api/v1/users")
-@RequiredArgsConstructor
 public class UserRest {
 
     private final UserService service;
     private final UserReportService reportService;
+
+    public UserRest(UserService service, UserReportService reportService) {
+        this.service = service;
+        this.reportService = reportService;
+    }
 
     @GetMapping
     public Flux<User> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) {
@@ -39,6 +43,33 @@ public class UserRest {
     @PutMapping("/{id}")
     public Mono<User> update(@PathVariable String id, @RequestBody User obj) {
         return service.update(id, obj);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Mono<Void> delete(@PathVariable String id) {
+        return service.delete(id);
+    }
+
+    @PatchMapping("/{id}/toggle-status")
+    public Mono<User> toggleStatus(@PathVariable String id) {
+        return service.findById(id)
+                .flatMap(u -> {
+                    boolean current = u.getIsActive() != null && u.getIsActive();
+                    u.setIsActive(!current);
+                    return service.save(u);
+                });
+    }
+
+    @PostMapping("/invite-worker")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Mono<User> inviteWorker(@RequestBody User obj) {
+        return service.invitarTrabajador(obj);
+    }
+
+    @PutMapping("/{id}/approve")
+    public Mono<User> approveUser(@PathVariable String id) {
+        return service.aprobarCliente(id);
     }
 
     // --- REPORTES Y EXPORTACIÓN ---

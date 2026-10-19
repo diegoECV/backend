@@ -7,9 +7,12 @@ import vallegrande.edu.pe.backend.model.InventoryBatch;
 import vallegrande.edu.pe.backend.repository.InventoryBatchRepository;
 
 @Service
-@RequiredArgsConstructor
 public class InventoryBatchService {
     private final InventoryBatchRepository repository;
+
+    public InventoryBatchService(InventoryBatchRepository repository) {
+        this.repository = repository;
+    }
 
     public Flux<InventoryBatch> findAll() { return repository.findAll(); }
     public Mono<InventoryBatch> findById(String id) { return repository.findById(id); }
@@ -18,4 +21,5 @@ public class InventoryBatchService {
         obj.setId(id);
         return repository.save(obj);
     }
+    public Mono<Void> deleteById(String id) { return repository.deleteById(id); }
 }

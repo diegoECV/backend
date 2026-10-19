@@ -6,4 +6,5 @@ import vallegrande.edu.pe.backend.model.BatchInspection;
 
 public interface BatchInspectionRepository extends ReactiveMongoRepository<BatchInspection, String> {
     Mono<BatchInspection> findByBatchId(Integer batchId);
+    Mono<Void> deleteByBatchId(Integer batchId);
 }

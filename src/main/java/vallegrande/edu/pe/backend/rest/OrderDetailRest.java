@@ -9,9 +9,12 @@ import vallegrande.edu.pe.backend.service.OrderDetailService;
 
 @RestController
 @RequestMapping("/api/v1/order-details")
-@RequiredArgsConstructor
 public class OrderDetailRest {
     private final OrderDetailService service;
+
+    public OrderDetailRest(OrderDetailService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public Flux<OrderDetail> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) { return limit > 0 ? service.findAll().take(limit) : service.findAll(); }
@@ -22,4 +25,7 @@ public class OrderDetailRest {
     public Mono<OrderDetail> create(@RequestBody OrderDetail obj) { return service.save(obj); }
     @PutMapping("/{id}")
     public Mono<OrderDetail> update(@PathVariable Integer id, @RequestBody OrderDetail obj) { return service.update(id, obj); }
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Mono<Void> delete(@PathVariable Integer id) { return service.deleteById(id); }
 }

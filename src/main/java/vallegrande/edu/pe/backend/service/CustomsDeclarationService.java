@@ -7,9 +7,12 @@ import vallegrande.edu.pe.backend.model.CustomsDeclaration;
 import vallegrande.edu.pe.backend.repository.CustomsDeclarationRepository;
 
 @Service
-@RequiredArgsConstructor
 public class CustomsDeclarationService {
     private final CustomsDeclarationRepository repository;
+
+    public CustomsDeclarationService(CustomsDeclarationRepository repository) {
+        this.repository = repository;
+    }
 
     public Flux<CustomsDeclaration> findAll() { return repository.findAll(); }
     public Mono<CustomsDeclaration> findById(Integer id) { return repository.findById(id); }
@@ -17,5 +20,8 @@ public class CustomsDeclarationService {
     public Mono<CustomsDeclaration> update(Integer id, CustomsDeclaration obj) {
         obj.setDeclarationId(id);
         return repository.save(obj);
+    }
+    public Mono<Void> deleteById(Integer id) {
+        return repository.deleteById(id);
     }
 }

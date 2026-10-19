@@ -7,9 +7,12 @@ import vallegrande.edu.pe.backend.model.PriceList;
 import vallegrande.edu.pe.backend.repository.PriceListRepository;
 
 @Service
-@RequiredArgsConstructor
 public class PriceListService {
     private final PriceListRepository repository;
+
+    public PriceListService(PriceListRepository repository) {
+        this.repository = repository;
+    }
 
     public Flux<PriceList> findAll() { return repository.findAll(); }
     public Mono<PriceList> findById(String id) { return repository.findById(id); }
@@ -18,4 +21,5 @@ public class PriceListService {
         obj.setId(id);
         return repository.save(obj);
     }
+    public Mono<Void> deleteById(String id) { return repository.deleteById(id); }
 }

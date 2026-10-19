@@ -11,10 +11,14 @@ import vallegrande.edu.pe.backend.repository.OrderRepository;
 import vallegrande.edu.pe.backend.repository.OrderTrackingRepository;
 
 @Service
-@RequiredArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderTrackingRepository orderTrackingRepository;
+
+    public OrderService(OrderRepository orderRepository, OrderTrackingRepository orderTrackingRepository) {
+        this.orderRepository = orderRepository;
+        this.orderTrackingRepository = orderTrackingRepository;
+    }
 
     public Flux<OrderDto> findAll() {
         return orderRepository.findAll()
@@ -38,6 +42,10 @@ public class OrderService {
                 .incoterm(dto.getIncoterm())
                 .status(dto.getStatus())
                 .statusDescription(dto.getStatusDescription())
+                .currency(dto.getCurrency())
+                .paymentTerms(dto.getPaymentTerms())
+                .destinationPort(dto.getDestinationPort())
+                .estimatedShippingDate(dto.getEstimatedShippingDate())
                 .build();
 
         return orderRepository.save(order)
@@ -60,6 +68,10 @@ public class OrderService {
                     existingOrder.setIncoterm(dto.getIncoterm());
                     existingOrder.setStatus(dto.getStatus());
                     existingOrder.setStatusDescription(dto.getStatusDescription());
+                    existingOrder.setCurrency(dto.getCurrency());
+                    existingOrder.setPaymentTerms(dto.getPaymentTerms());
+                    existingOrder.setDestinationPort(dto.getDestinationPort());
+                    existingOrder.setEstimatedShippingDate(dto.getEstimatedShippingDate());
                     return orderRepository.save(existingOrder);
                 })
                 .flatMap(updatedOrder -> orderTrackingRepository.findByOrderId(id)
@@ -74,6 +86,12 @@ public class OrderService {
                         .map(updatedTracking -> buildDto(updatedOrder, updatedTracking)));
     }
 
+    public Mono<Void> deleteById(Integer id) {
+        return orderTrackingRepository.findByOrderId(id)
+                .flatMap(orderTrackingRepository::delete)
+                .then(orderRepository.deleteById(id));
+    }
+
     private OrderDto buildDto(Order order, OrderTracking tracking) {
         return OrderDto.builder()
                 .orderId(order.getOrderId())
@@ -83,7 +101,11 @@ public class OrderService {
                 .incoterm(order.getIncoterm())
                 .status(order.getStatus())
                 .statusDescription(order.getStatusDescription())
-                .trackingEvents(tracking.getEvents())
+                .currency(order.getCurrency())
+                .paymentTerms(order.getPaymentTerms())
+                .destinationPort(order.getDestinationPort())
+                .estimatedShippingDate(order.getEstimatedShippingDate())
+                .trackingEvents(tracking != null ? tracking.getEvents() : null)
                 .build();
     }
 }

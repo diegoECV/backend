@@ -7,9 +7,12 @@ import vallegrande.edu.pe.backend.model.Client;
 import vallegrande.edu.pe.backend.repository.ClientRepository;
 
 @Service
-@RequiredArgsConstructor
 public class ClientService {
     private final ClientRepository repository;
+
+    public ClientService(ClientRepository repository) {
+        this.repository = repository;
+    }
 
     public Flux<Client> findAll() { return repository.findAll(); }
     public Mono<Client> findById(String id) { return repository.findById(id); }
@@ -18,4 +21,5 @@ public class ClientService {
         obj.setId(id);
         return repository.save(obj);
     }
+    public Mono<Void> deleteById(String id) { return repository.deleteById(id); }
 }

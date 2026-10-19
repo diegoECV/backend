@@ -7,9 +7,12 @@ import vallegrande.edu.pe.backend.model.AuditLog;
 import vallegrande.edu.pe.backend.repository.AuditLogRepository;
 
 @Service
-@RequiredArgsConstructor
 public class AuditLogService {
     private final AuditLogRepository repository;
+
+    public AuditLogService(AuditLogRepository repository) {
+        this.repository = repository;
+    }
 
     public Flux<AuditLog> findAll() { return repository.findAll(); }
     public Mono<AuditLog> findById(Long id) { return repository.findById(id); }
@@ -18,4 +21,5 @@ public class AuditLogService {
         obj.setId(id);
         return repository.save(obj);
     }
+    public Mono<Void> deleteById(Long id) { return repository.deleteById(id); }
 }

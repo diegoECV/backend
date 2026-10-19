@@ -15,7 +15,6 @@ import vallegrande.edu.pe.backend.repository.UserRepository;
  */
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository repository;
@@ -23,6 +22,11 @@ public class UserService {
 
     @Value("${app.frontend-url:http://localhost:5173}")
     private String frontendUrl;
+
+    public UserService(UserRepository repository, MailService mailService) {
+        this.repository = repository;
+        this.mailService = mailService;
+    }
 
     // ===================== CRUD BÁSICO =====================
 

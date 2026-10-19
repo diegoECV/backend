@@ -7,9 +7,12 @@ import vallegrande.edu.pe.backend.model.Invoice;
 import vallegrande.edu.pe.backend.repository.InvoiceRepository;
 
 @Service
-@RequiredArgsConstructor
 public class InvoiceService {
     private final InvoiceRepository repository;
+
+    public InvoiceService(InvoiceRepository repository) {
+        this.repository = repository;
+    }
 
     public Flux<Invoice> findAll() { return repository.findAll(); }
     public Mono<Invoice> findById(Integer id) { return repository.findById(id); }
@@ -18,4 +21,5 @@ public class InvoiceService {
         obj.setInvoiceId(id);
         return repository.save(obj);
     }
+    public Mono<Void> deleteById(Integer id) { return repository.deleteById(id); }
 }

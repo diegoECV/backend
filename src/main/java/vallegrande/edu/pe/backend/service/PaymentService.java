@@ -7,9 +7,12 @@ import vallegrande.edu.pe.backend.model.Payment;
 import vallegrande.edu.pe.backend.repository.PaymentRepository;
 
 @Service
-@RequiredArgsConstructor
 public class PaymentService {
     private final PaymentRepository repository;
+
+    public PaymentService(PaymentRepository repository) {
+        this.repository = repository;
+    }
 
     public Flux<Payment> findAll() { return repository.findAll(); }
     public Mono<Payment> findById(Integer id) { return repository.findById(id); }
@@ -18,4 +21,5 @@ public class PaymentService {
         obj.setPaymentId(id);
         return repository.save(obj);
     }
+    public Mono<Void> deleteById(Integer id) { return repository.deleteById(id); }
 }

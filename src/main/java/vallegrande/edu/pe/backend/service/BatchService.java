@@ -11,10 +11,14 @@ import vallegrande.edu.pe.backend.repository.BatchRepository;
 import vallegrande.edu.pe.backend.repository.BatchInspectionRepository;
 
 @Service
-@RequiredArgsConstructor
 public class BatchService {
     private final BatchRepository batchRepository;
     private final BatchInspectionRepository batchInspectionRepository;
+
+    public BatchService(BatchRepository batchRepository, BatchInspectionRepository batchInspectionRepository) {
+        this.batchRepository = batchRepository;
+        this.batchInspectionRepository = batchInspectionRepository;
+    }
 
     public Flux<BatchDto> findAll() {
         return batchRepository.findAll()
@@ -74,6 +78,11 @@ public class BatchService {
                                 .inspections(dto.getInspections())
                                 .build()))
                         .map(updatedInspection -> buildDto(updatedBatch, updatedInspection)));
+    }
+
+    public Mono<Void> deleteById(Integer id) {
+        return batchInspectionRepository.deleteByBatchId(id)
+                .then(batchRepository.deleteById(id));
     }
 
     private BatchDto buildDto(Batch batch, BatchInspection inspection) {

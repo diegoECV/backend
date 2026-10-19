@@ -9,9 +9,12 @@ import vallegrande.edu.pe.backend.service.PaymentService;
 
 @RestController
 @RequestMapping("/api/v1/payments")
-@RequiredArgsConstructor
 public class PaymentRest {
     private final PaymentService service;
+
+    public PaymentRest(PaymentService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public Flux<Payment> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) { return limit > 0 ? service.findAll().take(limit) : service.findAll(); }
@@ -22,4 +25,7 @@ public class PaymentRest {
     public Mono<Payment> create(@RequestBody Payment obj) { return service.save(obj); }
     @PutMapping("/{id}")
     public Mono<Payment> update(@PathVariable Integer id, @RequestBody Payment obj) { return service.update(id, obj); }
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Mono<Void> delete(@PathVariable Integer id) { return service.deleteById(id); }
 }

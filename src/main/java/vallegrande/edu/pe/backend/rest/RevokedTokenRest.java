@@ -10,9 +10,12 @@ import vallegrande.edu.pe.backend.service.RevokedTokenService;
 
 @RestController
 @RequestMapping("/api/v1/revoked-tokens")
-@RequiredArgsConstructor
 public class RevokedTokenRest {
     private final RevokedTokenService service;
+
+    public RevokedTokenRest(RevokedTokenService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public Flux<RevokedToken> findAll() { return service.findAll(); }
@@ -29,5 +32,5 @@ public class RevokedTokenRest {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Mono<Void> delete(@PathVariable String id) { return service.findById(id).flatMap(t -> service.findAll().then()); }
+    public Mono<Void> delete(@PathVariable String id) { return service.deleteById(id); }
 }

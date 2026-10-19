@@ -10,9 +10,12 @@ import vallegrande.edu.pe.backend.service.BatchService;
 
 @RestController
 @RequestMapping("/api/v1/batches")
-@RequiredArgsConstructor
 public class BatchRest {
     private final BatchService batchService;
+
+    public BatchRest(BatchService batchService) {
+        this.batchService = batchService;
+    }
 
     @GetMapping
     public Flux<BatchDto> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) {
@@ -32,5 +35,11 @@ public class BatchRest {
     @PutMapping("/{id}")
     public Mono<BatchDto> update(@PathVariable Integer id, @RequestBody BatchDto dto) {
         return batchService.update(id, dto);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Mono<Void> delete(@PathVariable Integer id) {
+        return batchService.deleteById(id);
     }
 }

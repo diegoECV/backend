@@ -7,9 +7,12 @@ import vallegrande.edu.pe.backend.model.QualityInspection;
 import vallegrande.edu.pe.backend.repository.QualityInspectionRepository;
 
 @Service
-@RequiredArgsConstructor
 public class QualityInspectionService {
     private final QualityInspectionRepository repository;
+
+    public QualityInspectionService(QualityInspectionRepository repository) {
+        this.repository = repository;
+    }
 
     public Flux<QualityInspection> findAll() { return repository.findAll(); }
     public Mono<QualityInspection> findById(String id) { return repository.findById(id); }
@@ -18,4 +21,5 @@ public class QualityInspectionService {
         obj.setId(id);
         return repository.save(obj);
     }
+    public Mono<Void> deleteById(String id) { return repository.deleteById(id); }
 }

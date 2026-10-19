@@ -7,9 +7,12 @@ import vallegrande.edu.pe.backend.model.RevokedToken;
 import vallegrande.edu.pe.backend.repository.RevokedTokenRepository;
 
 @Service
-@RequiredArgsConstructor
 public class RevokedTokenService {
     private final RevokedTokenRepository repository;
+
+    public RevokedTokenService(RevokedTokenRepository repository) {
+        this.repository = repository;
+    }
 
     public Flux<RevokedToken> findAll() { return repository.findAll(); }
     public Mono<RevokedToken> findById(String id) { return repository.findById(id); }
@@ -18,4 +21,5 @@ public class RevokedTokenService {
         obj.setId(id);
         return repository.save(obj);
     }
+    public Mono<Void> deleteById(String id) { return repository.deleteById(id); }
 }
