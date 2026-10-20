@@ -24,7 +24,7 @@ public class ClientReportService {
     private final ClientRepository clientRepository;
 
     private static final String[] HEADERS = {
-        "ID", "Tipo Doc.", "Nro. Documento", "Empresa", "Contacto", "País", "Email", "Teléfono", "Incoterm", "Moneda"
+        "ID", "Tipo Doc.", "Nro. Documento", "Empresa", "Contacto", "País", "Email", "Teléfono", "Incoterm", "Moneda", "Estado", "Fecha Creación", "Creado Por", "Fecha Modificación", "Modificado Por"
     };
 
     private List<String> mapClientToRow(Client c) {
@@ -38,7 +38,12 @@ public class ClientReportService {
             c.getEmail() != null ? c.getEmail() : "",
             c.getPhone() != null ? c.getPhone() : "",
             c.getPreferredIncoterm() != null ? c.getPreferredIncoterm() : "",
-            c.getPreferredCurrency() != null ? c.getPreferredCurrency() : ""
+            c.getPreferredCurrency() != null ? c.getPreferredCurrency() : "",
+            (c.getIsActive() == null || Boolean.TRUE.equals(c.getIsActive())) ? "ACTIVO" : "INACTIVO",
+            c.getCreatedAt() != null ? c.getCreatedAt() : "",
+            c.getCreatedBy() != null ? c.getCreatedBy() : "",
+            c.getUpdatedAt() != null ? c.getUpdatedAt() : "",
+            c.getUpdatedBy() != null ? c.getUpdatedBy() : ""
         );
     }
 
@@ -53,6 +58,7 @@ public class ClientReportService {
         String phone = r.size() > 7 ? r.get(7) : "";
         String incoterm = r.size() > 8 && !r.get(8).isBlank() ? r.get(8) : "FOB";
         String currency = r.size() > 9 && !r.get(9).isBlank() ? r.get(9) : "USD";
+        String now = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
         return Client.builder()
                 .id(id)
@@ -70,6 +76,11 @@ public class ClientReportService {
                 .preferredCurrency(currency)
                 .creditLimit(100000.0)
                 .language("es")
+                .isActive(true)
+                .createdAt(now)
+                .createdBy("IMPORT_FILE")
+                .updatedAt(now)
+                .updatedBy("IMPORT_FILE")
                 .build();
     }
 
