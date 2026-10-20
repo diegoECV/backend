@@ -5,9 +5,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import vallegrande.edu.pe.backend.dto.ImportResponse;
 import vallegrande.edu.pe.backend.dto.OrderDto;
 import vallegrande.edu.pe.backend.service.OrderReportService;
 import vallegrande.edu.pe.backend.service.OrderService;
@@ -26,7 +28,11 @@ public class OrderRest {
 
     @GetMapping
     public Flux<OrderDto> findAll(@RequestParam(required = false, defaultValue = "-1") int limit) {
-        return limit > 0 ? orderService.findAll().take(limit) : orderService.findAll();
+        return limit > 0 ? orderService.findAll().take(limit) : serviceFindAll();
+    }
+
+    private Flux<OrderDto> serviceFindAll() {
+        return orderService.findAll();
     }
 
     @GetMapping("/{id}")
@@ -75,5 +81,25 @@ public class OrderRest {
                 .map(bytes -> ResponseEntity.ok()
                         .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=pedidos.csv")
                         .body(bytes));
+    }
+
+    // --- CARGA MASIVA E IMPORTACIÓN ---
+
+    @PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Mono<ResponseEntity<ImportResponse>> importOrders(@RequestPart("file") FilePart filePart) {
+        return reportService.importFile(filePart)
+                .map(ResponseEntity::ok);
+    }
+
+    @PostMapping(value = "/import/excel", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Mono<ResponseEntity<ImportResponse>> importOrdersExcel(@RequestPart("file") FilePart filePart) {
+        return reportService.importFromExcel(filePart)
+                .map(ResponseEntity::ok);
+    }
+
+    @PostMapping(value = "/import/csv", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Mono<ResponseEntity<ImportResponse>> importOrdersCsv(@RequestPart("file") FilePart filePart) {
+        return reportService.importFromCsv(filePart)
+                .map(ResponseEntity::ok);
     }
 }

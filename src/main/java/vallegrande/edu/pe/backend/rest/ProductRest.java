@@ -5,9 +5,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import vallegrande.edu.pe.backend.dto.ImportResponse;
 import vallegrande.edu.pe.backend.model.Product;
 import vallegrande.edu.pe.backend.service.ProductReportService;
 import vallegrande.edu.pe.backend.service.ProductService;
@@ -65,5 +67,25 @@ public class ProductRest {
                 .map(bytes -> ResponseEntity.ok()
                         .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=productos.csv")
                         .body(bytes));
+    }
+
+    // --- CARGA MASIVA E IMPORTACIÓN ---
+
+    @PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Mono<ResponseEntity<ImportResponse>> importProducts(@RequestPart("file") FilePart filePart) {
+        return reportService.importFile(filePart)
+                .map(ResponseEntity::ok);
+    }
+
+    @PostMapping(value = "/import/excel", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Mono<ResponseEntity<ImportResponse>> importProductsExcel(@RequestPart("file") FilePart filePart) {
+        return reportService.importFromExcel(filePart)
+                .map(ResponseEntity::ok);
+    }
+
+    @PostMapping(value = "/import/csv", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Mono<ResponseEntity<ImportResponse>> importProductsCsv(@RequestPart("file") FilePart filePart) {
+        return reportService.importFromCsv(filePart)
+                .map(ResponseEntity::ok);
     }
 }
