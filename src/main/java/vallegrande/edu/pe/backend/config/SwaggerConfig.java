@@ -33,7 +33,8 @@ public class SwaggerConfig {
                                 .email("dev@visons.pe"))
                         .license(new License().name("Privado").url("#")))
                 .servers(List.of(
-                        new Server().url("http://localhost:" + serverPort).description("Servidor local")
+                        new Server().url("/").description("Servidor actual (Cloud / Local)"),
+                        new Server().url("http://localhost:" + serverPort).description("Servidor local alternativo")
                 ))
                 .addSecurityItem(new SecurityRequirement().addList("Bearer Authentication"))
                 .components(new Components()
