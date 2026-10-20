@@ -28,7 +28,7 @@ public class UserReportService {
     }
 
     private static final String[] HEADERS = {
-        "ID", "Usuario", "Nombre Completo", "Email", "Teléfono", "Rol", "Departamento", "Estado", "Último Acceso"
+        "ID", "Usuario", "Nombre Completo", "Email", "Teléfono", "Rol", "Departamento", "Estado", "Último Acceso", "Fecha Creación", "Creado Por", "Fecha Modificación", "Modificado Por"
     };
 
     private List<String> mapUserToRow(User u) {
@@ -40,8 +40,12 @@ public class UserReportService {
             u.getPhone() != null ? u.getPhone() : "",
             u.getRole() != null ? u.getRole() : "",
             u.getDepartment() != null ? u.getDepartment() : "",
-            u.getIsActive() != null ? (u.getIsActive() ? "ACTIVO" : "INACTIVO") : "",
-            u.getLastLogin() != null ? u.getLastLogin() : ""
+            (u.getIsActive() == null || Boolean.TRUE.equals(u.getIsActive())) ? "ACTIVO" : "INACTIVO",
+            u.getLastLogin() != null ? u.getLastLogin() : "",
+            u.getCreatedAt() != null ? u.getCreatedAt() : "",
+            u.getCreatedBy() != null ? u.getCreatedBy() : "",
+            u.getUpdatedAt() != null ? u.getUpdatedAt() : "",
+            u.getUpdatedBy() != null ? u.getUpdatedBy() : ""
         );
     }
 
@@ -57,6 +61,7 @@ public class UserReportService {
         String role = r.size() > 5 && !r.get(5).isBlank() ? r.get(5) : "USER";
         String dept = r.size() > 6 ? r.get(6) : "Operaciones";
         boolean active = r.size() <= 7 || r.get(7).equalsIgnoreCase("ACTIVO") || r.get(7).equalsIgnoreCase("true") || r.get(7).equalsIgnoreCase("1");
+        String now = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
         return User.builder()
                 .id(id)
@@ -68,6 +73,10 @@ public class UserReportService {
                 .role(role)
                 .department(dept)
                 .isActive(active)
+                .createdAt(now)
+                .createdBy("IMPORT_FILE")
+                .updatedAt(now)
+                .updatedBy("IMPORT_FILE")
                 .build();
     }
 

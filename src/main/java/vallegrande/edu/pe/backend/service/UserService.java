@@ -28,17 +28,94 @@ public class UserService {
         this.mailService = mailService;
     }
 
-    // ===================== CRUD BÁSICO =====================
+    private static final java.time.format.DateTimeFormatter ISO_FORMATTER = java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
+    private String currentTimestamp() {
+        return java.time.LocalDateTime.now().format(ISO_FORMATTER);
+    }
+
+    // ===================== CRUD BÁSICO Y AUDITORÍA =====================
 
     public Flux<User> findAll() { return repository.findAll(); }
 
+    public Flux<User> findActiveOnly() {
+        return repository.findAll()
+                .filter(u -> u.getIsActive() == null || Boolean.TRUE.equals(u.getIsActive()));
+    }
+
+    public Flux<User> findDeletedOnly() {
+        return repository.findAll()
+                .filter(u -> Boolean.FALSE.equals(u.getIsActive()));
+    }
+
     public Mono<User> findById(String id) { return repository.findById(id); }
 
-    public Mono<User> save(User obj) { return repository.save(obj); }
+    public Mono<User> save(User obj) {
+        if (obj.getId() == null || obj.getId().isBlank()) {
+            obj.setId("U-" + java.util.UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+        }
+        if (obj.getIsActive() == null) {
+            obj.setIsActive(true);
+        }
+        String now = currentTimestamp();
+        if (obj.getCreatedAt() == null || obj.getCreatedAt().isBlank()) {
+            obj.setCreatedAt(now);
+        }
+        if (obj.getCreatedBy() == null || obj.getCreatedBy().isBlank()) {
+            obj.setCreatedBy("ADMIN");
+        }
+        obj.setUpdatedAt(now);
+        if (obj.getUpdatedBy() == null || obj.getUpdatedBy().isBlank()) {
+            obj.setUpdatedBy("ADMIN");
+        }
+        return repository.save(obj);
+    }
 
     public Mono<User> update(String id, User obj) {
-        obj.setId(id);
-        return repository.save(obj);
+        return repository.findById(id)
+                .flatMap(existing -> {
+                    obj.setId(id);
+                    obj.setCreatedAt(existing.getCreatedAt() != null ? existing.getCreatedAt() : currentTimestamp());
+                    obj.setCreatedBy(existing.getCreatedBy() != null ? existing.getCreatedBy() : "ADMIN");
+                    if (obj.getIsActive() == null) {
+                        obj.setIsActive(existing.getIsActive() != null ? existing.getIsActive() : true);
+                    }
+                    obj.setUpdatedAt(currentTimestamp());
+                    if (obj.getUpdatedBy() == null || obj.getUpdatedBy().isBlank()) {
+                        obj.setUpdatedBy("ADMIN");
+                    }
+                    return repository.save(obj);
+                })
+                .switchIfEmpty(Mono.defer(() -> {
+                    obj.setId(id);
+                    return save(obj);
+                }));
+    }
+
+    public Mono<User> softDelete(String id) {
+        return repository.findById(id)
+                .flatMap(u -> {
+                    String now = currentTimestamp();
+                    u.setIsActive(false);
+                    u.setDeletedAt(now);
+                    u.setDeletedBy("ADMIN");
+                    u.setUpdatedAt(now);
+                    u.setUpdatedBy("ADMIN_DELETED");
+                    return repository.save(u);
+                });
+    }
+
+    public Mono<User> restore(String id) {
+        return repository.findById(id)
+                .flatMap(u -> {
+                    String now = currentTimestamp();
+                    u.setIsActive(true);
+                    u.setDeletedAt(null);
+                    u.setDeletedBy(null);
+                    u.setUpdatedAt(now);
+                    u.setUpdatedBy("ADMIN_RESTORED");
+                    return repository.save(u);
+                });
     }
 
     public Mono<Void> delete(String id) { return repository.deleteById(id); }
