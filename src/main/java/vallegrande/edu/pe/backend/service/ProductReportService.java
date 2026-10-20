@@ -24,7 +24,7 @@ public class ProductReportService {
     private final ProductRepository productRepository;
 
     private static final String[] HEADERS = {
-        "ID", "Código", "Nombre", "Categoría", "Variedad", "Calibre", "Unidad", "Partida Arancelaria (HS)", "Activo"
+        "ID", "Código", "Nombre", "Categoría", "Variedad", "Calibre", "Unidad", "Partida Arancelaria (HS)", "Temperatura", "Vida Útil", "Empaque", "Región", "Calidad", "Certificación", "Estado", "Fecha Creación", "Creado Por", "Fecha Modificación", "Modificado Por"
     };
 
     private List<String> mapProductToRow(Product p) {
@@ -37,7 +37,17 @@ public class ProductReportService {
             p.getCaliber() != null ? p.getCaliber() : "",
             p.getUnitMeasure() != null ? p.getUnitMeasure() : "",
             p.getHsCode() != null ? p.getHsCode() : "",
-            p.getIsActive() != null ? (p.getIsActive() ? "SÍ" : "NO") : ""
+            p.getStorageTemperature() != null ? p.getStorageTemperature() : "",
+            p.getShelfLifeDays() != null ? String.valueOf(p.getShelfLifeDays()) : "",
+            p.getPackagingType() != null ? p.getPackagingType() : "",
+            p.getOriginRegion() != null ? p.getOriginRegion() : "",
+            p.getQualityGrade() != null ? p.getQualityGrade() : "",
+            p.getOrganicCertification() != null ? p.getOrganicCertification() : "",
+            (p.getIsActive() == null || Boolean.TRUE.equals(p.getIsActive())) ? "ACTIVO" : "INACTIVO",
+            p.getCreatedAt() != null ? p.getCreatedAt() : "",
+            p.getCreatedBy() != null ? p.getCreatedBy() : "",
+            p.getUpdatedAt() != null ? p.getUpdatedAt() : "",
+            p.getUpdatedBy() != null ? p.getUpdatedBy() : ""
         );
     }
 
@@ -45,12 +55,23 @@ public class ProductReportService {
         String id = r.size() > 0 && !r.get(0).isBlank() ? r.get(0) : "PROD-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
         String code = r.size() > 1 ? r.get(1) : "";
         String name = r.size() > 2 ? r.get(2) : "";
-        String categoryId = r.size() > 3 ? r.get(3) : "";
+        String categoryId = r.size() > 3 && !r.get(3).isBlank() ? r.get(3) : "CAT-01";
         String variety = r.size() > 4 ? r.get(4) : "";
         String caliber = r.size() > 5 ? r.get(5) : "";
         String unitMeasure = r.size() > 6 && !r.get(6).isBlank() ? r.get(6) : "KG";
         String hsCode = r.size() > 7 ? r.get(7) : "";
-        boolean active = r.size() <= 8 || r.get(8).equalsIgnoreCase("SÍ") || r.get(8).equalsIgnoreCase("SI") || r.get(8).equalsIgnoreCase("true") || r.get(8).equalsIgnoreCase("1");
+        String temp = r.size() > 8 ? r.get(8) : "2°C - 4°C";
+        Integer shelfLife = 30;
+        if (r.size() > 9 && !r.get(9).isBlank()) {
+            try {
+                shelfLife = Integer.parseInt(r.get(9).replaceAll("\\D", ""));
+            } catch (Exception ignored) {}
+        }
+        String packaging = r.size() > 10 ? r.get(10) : "Caja de Exportación 5Kg";
+        String region = r.size() > 11 ? r.get(11) : "Ica";
+        String grade = r.size() > 12 ? r.get(12) : "CAT_EXTRA";
+        String cert = r.size() > 13 ? r.get(13) : "GLOBAL_GAP";
+        String now = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
         return Product.builder()
                 .id(id)
@@ -61,7 +82,17 @@ public class ProductReportService {
                 .caliber(caliber)
                 .unitMeasure(unitMeasure)
                 .hsCode(hsCode)
-                .isActive(active)
+                .storageTemperature(temp)
+                .shelfLifeDays(shelfLife)
+                .packagingType(packaging)
+                .originRegion(region)
+                .qualityGrade(grade)
+                .organicCertification(cert)
+                .isActive(true)
+                .createdAt(now)
+                .createdBy("IMPORT_FILE")
+                .updatedAt(now)
+                .updatedBy("IMPORT_FILE")
                 .build();
     }
 
