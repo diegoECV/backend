@@ -22,7 +22,22 @@ public class User {
     private String phone;
     private String role;
     private String department;
-    private Boolean isActive;
+    private String position;
+    private String documentType;
+    private String documentNumber;
     private String lastLogin;
+
+    // ── ESTADO LÓGICO PARA SOFT DELETE ──
+    @Builder.Default
+    private Boolean isActive = true;
+
+    // ── 4 CAMPOS DE AUDITORÍA OBLIGATORIOS (FECHA Y HORA) ──
     private String createdAt;
+    private String createdBy;
+    private String updatedAt;
+    private String updatedBy;
+
+    // ── TRAZABILIDAD ADICIONAL DE ELIMINACIÓN ──
+    private String deletedAt;
+    private String deletedBy;
 }

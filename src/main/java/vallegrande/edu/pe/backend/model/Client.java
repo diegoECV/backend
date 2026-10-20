@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class Client {
     @Id
     private String id;
+    // ── 14 CAMPOS FUNCIONALES DE NEGOCIO ──
     private String documentType;
     private String documentNumber;
     private String companyName;
@@ -30,4 +31,18 @@ public class Client {
     private String preferredCurrency;
     private Double creditLimit;
     private String language;
+
+    // ── ESTADO LÓGICO PARA SOFT DELETE ──
+    @Builder.Default
+    private Boolean isActive = true;
+
+    // ── 4 CAMPOS DE AUDITORÍA OBLIGATORIOS (FECHA Y HORA) ──
+    private String createdAt;
+    private String createdBy;
+    private String updatedAt;
+    private String updatedBy;
+
+    // ── TRAZABILIDAD ADICIONAL DE ELIMINACIÓN ──
+    private String deletedAt;
+    private String deletedBy;
 }

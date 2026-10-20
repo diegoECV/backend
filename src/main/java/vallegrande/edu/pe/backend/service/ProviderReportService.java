@@ -24,7 +24,7 @@ public class ProviderReportService {
     private final ProviderRepository providerRepository;
 
     private static final String[] HEADERS = {
-        "ID", "Tipo Doc.", "Nro. Documento", "Razón Social", "Contacto", "País", "Email", "Teléfono", "Ubigeo", "Certificación"
+        "ID", "Tipo Doc.", "Nro. Documento", "Razón Social", "Contacto", "País", "Email", "Teléfono", "Dirección", "Departamento", "Provincia", "Distrito", "Ubigeo", "Cultivo Principal", "CCI", "Certificación", "Estado", "Fecha Creación", "Creado Por", "Fecha Modificación", "Modificado Por"
     };
 
     private List<String> mapProviderToRow(Provider p) {
@@ -37,8 +37,19 @@ public class ProviderReportService {
             p.getCountry() != null ? p.getCountry() : "",
             p.getEmail() != null ? p.getEmail() : "",
             p.getPhone() != null ? p.getPhone() : "",
+            p.getAddress() != null ? p.getAddress() : "",
+            p.getDepartment() != null ? p.getDepartment() : "",
+            p.getProvince() != null ? p.getProvince() : "",
+            p.getDistrict() != null ? p.getDistrict() : "",
             p.getUbigeo() != null ? p.getUbigeo() : "",
-            p.getCertificationStatus() != null ? p.getCertificationStatus() : ""
+            p.getMainCrop() != null ? p.getMainCrop() : "",
+            p.getBankAccountCci() != null ? p.getBankAccountCci() : "",
+            p.getCertificationStatus() != null ? p.getCertificationStatus() : "",
+            (p.getIsActive() == null || Boolean.TRUE.equals(p.getIsActive())) ? "ACTIVO" : "INACTIVO",
+            p.getCreatedAt() != null ? p.getCreatedAt() : "",
+            p.getCreatedBy() != null ? p.getCreatedBy() : "",
+            p.getUpdatedAt() != null ? p.getUpdatedAt() : "",
+            p.getUpdatedBy() != null ? p.getUpdatedBy() : ""
         );
     }
 
@@ -48,11 +59,18 @@ public class ProviderReportService {
         String docNum = r.size() > 2 ? r.get(2) : "";
         String company = r.size() > 3 ? r.get(3) : "";
         String contact = r.size() > 4 ? r.get(4) : "";
-        String country = r.size() > 5 ? r.get(5) : "Peru";
+        String country = r.size() > 5 && !r.get(5).isBlank() ? r.get(5) : "Perú";
         String email = r.size() > 6 ? r.get(6) : "";
         String phone = r.size() > 7 ? r.get(7) : "";
-        String ubigeo = r.size() > 8 ? r.get(8) : "110101";
-        String cert = r.size() > 9 ? r.get(9) : "GLOBAL_GAP_CERTIFIED";
+        String address = r.size() > 8 && !r.get(8).isBlank() ? r.get(8) : "Valle Agrícola Principal";
+        String dept = r.size() > 9 && !r.get(9).isBlank() ? r.get(9) : "Ica";
+        String prov = r.size() > 10 && !r.get(10).isBlank() ? r.get(10) : "Ica";
+        String dist = r.size() > 11 && !r.get(11).isBlank() ? r.get(11) : "Salas";
+        String ubigeo = r.size() > 12 && !r.get(12).isBlank() ? r.get(12) : "110108";
+        String crop = r.size() > 13 && !r.get(13).isBlank() ? r.get(13) : "Uva Red Globe";
+        String cci = r.size() > 14 && !r.get(14).isBlank() ? r.get(14) : "002-191-001234567890-52";
+        String cert = r.size() > 15 && !r.get(15).isBlank() ? r.get(15) : "GLOBAL_GAP_CERTIFIED";
+        String now = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
         return Provider.builder()
                 .id(id)
@@ -63,10 +81,19 @@ public class ProviderReportService {
                 .country(country)
                 .email(email)
                 .phone(phone)
-                .address("Fundo de Producción Agrícola")
+                .address(address)
+                .department(dept)
+                .province(prov)
+                .district(dist)
                 .ubigeo(ubigeo)
-                .bankAccountCci("002-191-000000000000-00")
+                .mainCrop(crop)
+                .bankAccountCci(cci)
                 .certificationStatus(cert)
+                .isActive(true)
+                .createdAt(now)
+                .createdBy("IMPORT_FILE")
+                .updatedAt(now)
+                .updatedBy("IMPORT_FILE")
                 .build();
     }
 
