@@ -55,7 +55,7 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.OPTIONS).permitAll()
                         .pathMatchers("/api/v1/auth/**").permitAll()
                         // Swagger / OpenAPI docs
-                        .pathMatchers("/v3/api-docs/**", "/swagger-ui/**", "/webjars/**").permitAll()
+                        .pathMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/webjars/**").permitAll()
                         // AuditLog y RevokedTokens solo para ADMIN
                         .pathMatchers("/api/v1/audit-logs/**").hasRole("ADMIN")
                         .pathMatchers("/api/v1/revoked-tokens/**").hasRole("ADMIN")
